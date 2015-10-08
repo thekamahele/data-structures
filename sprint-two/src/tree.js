@@ -13,52 +13,30 @@ var Tree = function(value) {
 var treeMethods = {};
 
 treeMethods.addChild = function(value) {
-  // your code here
+
   this.children[this.children.length] = Tree(value);  // fix me
 };
 
-treeMethods.contains = function(target) {
-//   var childs = childrenArray || this.children;
-//   //iterate through children of tree
-  
+treeMethods.contains = function(target, node) {
+  var current = node || this;
+  //iterate through children of tree
+  var found = false;
 
-//   if(this.value === target) {
-//     return true;
-//   }
-
-//   for(var i = 0; i < childs.length; i++){
-//     if(childs[i].value===target){
-//       return true;
-//     }
-
-//     if(childs[i].children.length!==0){
-//       //debugger;
-//       return this.contains(target, childs[i].children);
-//     }
-//   }
-//  return false;
-  var childs = this.children;
-
-  
-  function traverse() {  
-  if(this.value === target) {
-  return true;
+  if(current.value === target) {
+    found = true;
+    return found;
   }
-  
-  for(var i = 0; i < childs.length; i++){
-    if(childs[i].value===target){
-      return true;
-    }
 
-    if(childs[i].children.length!==0){
-      //debugger;
-      childs = child[i].children;
-      return traverse();
+  for(var i = 0; i < current.children.length; i++){
+
+    found = this.contains(target, current.children[i]);
+    
+    if(found === true) {
+      return found;
     }
   }
- return false;
-  }
-  
+
+ return found;
 
 };
 
