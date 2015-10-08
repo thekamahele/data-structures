@@ -3,16 +3,24 @@
 // ------------------------
 // Instantiate a new graph
 var Graph = function() {
+  this.edgeList = [];
+  this.adjacencyList = [];
 };
 
 // ------------------------
 // Add a node to the graph, passing in the node's value.
 Graph.prototype.addNode = function(node) {
+  //push an array to adjacencyList at node's index = node
+  this.adjacencyList[node]=[];
 };
 
 // ------------------------
 // Return a boolean value indicating if the value passed to contains is represented in the graph.
 Graph.prototype.contains = function(node) {
+  if(this.adjacencyList[node]) {
+    return true;
+  }
+  return false;
 };
 
 // ------------------------
