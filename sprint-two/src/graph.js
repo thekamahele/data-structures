@@ -26,16 +26,26 @@ Graph.prototype.contains = function(node) {
 // ------------------------
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
+  delete this.adjacencyList[node];
 };
 
 // ------------------------
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
 Graph.prototype.hasEdge = function(fromNode, toNode) {
+  var list = this.adjacencyList[fromNode];
+
+  for(var i = 0; i < list.length)
 };
 
 // ------------------------
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode) {
+  this.edgeList.push([fromNode, toNode]);
+  this.edgeList.push([toNode, fromNode]);
+
+  this.adjacencyList[fromNode].push(toNode);
+  this.adjacencyList[toNode].push(fromNode);
+
 };
 
 // ------------------------
