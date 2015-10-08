@@ -17,19 +17,49 @@ treeMethods.addChild = function(value) {
   this.children[this.children.length] = Tree(value);  // fix me
 };
 
-treeMethods.contains = function(target, childrenArray) {
-  var childs = childrenArray || this.children;
+treeMethods.contains = function(target) {
+//   var childs = childrenArray || this.children;
+//   //iterate through children of tree
+  
 
-  //iterate through children of tree
+//   if(this.value === target) {
+//     return true;
+//   }
+
+//   for(var i = 0; i < childs.length; i++){
+//     if(childs[i].value===target){
+//       return true;
+//     }
+
+//     if(childs[i].children.length!==0){
+//       //debugger;
+//       return this.contains(target, childs[i].children);
+//     }
+//   }
+//  return false;
+  var childs = this.children;
+
+  
+  function traverse() {  
+  if(this.value === target) {
+  return true;
+  }
+  
   for(var i = 0; i < childs.length; i++){
     if(childs[i].value===target){
       return true;
     }
+
     if(childs[i].children.length!==0){
-      return this.contains(target, childs[i].children);
+      //debugger;
+      childs = child[i].children;
+      return traverse();
     }
   }
  return false;
+  }
+  
+
 };
 
 
