@@ -9,12 +9,22 @@ HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   if(this._storage.get(index)=== null || this._storage.get(index) === undefined){
     this._storage.set(index,[[k,v]]);
-    //console.log(this._storage.get(index)[0]);
+    
   } else{
-    this._storage.get(index).push([k,v]);
-    //console.log(this._storage.get(index)[0]);
+    // needs to overwrite value if k already exsists
+    var bucket = this._storage.get(index);
+    var foundKey = false;
+    _.each(bucket, function(tup){
+      if(tup[0]===k){
+        tup[1] = v;
+        foundKey = true;
+      }
+    });
+     
+    if(foundKey===false){
+      this._storage.get(index).push([k,v]);
+    }
   }
-  
 };
 
 HashTable.prototype.retrieve = function(k) {
@@ -22,7 +32,6 @@ HashTable.prototype.retrieve = function(k) {
   var bucket = this._storage.get(index);
   var result;
   _.each(bucket, function(tup){
-    //console.log(tup[0]);
     if(tup===null){
       result = null;
     }
@@ -31,24 +40,19 @@ HashTable.prototype.retrieve = function(k) {
     }
   });
   return result;
-
 };
 
 HashTable.prototype.remove = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
-  console.log(this._storage.get(index));  
+ 
   var bucket = this._storage.get(index);
 
   _.each(bucket, function(tup, index){
     console.log(tup);
     if(tup[0]===k){
       bucket[index] = null;
-      //tup[0] = null;
-      //tup[1] = null;
     }
   });
-
-  console.log(this._storage.get(index));
   this._storage.set(index,bucket);
   
 };
