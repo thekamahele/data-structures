@@ -3,12 +3,29 @@
 var HashTable = function() {
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
+  this._tupCount = 0;
+};
+
+HashTable.prototype.resize = function(){
+
+
+  if(this._limit * .75 <= this._tupCount){
+    this._limit *= 2;
+  } else if (this._limit*.25 >= this._tupCount){
+    this._limit /= 2;
+  }
+
+  //create new LimitedArray with new limit
+  //iterate through each tuple
+    //call insert onto new hashtable
+  //set this._storage = new hashtable
 };
 
 HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   if(this._storage.get(index)=== null || this._storage.get(index) === undefined){
     this._storage.set(index,[[k,v]]);
+    this._tupCount++;
     
   } else{
     // needs to overwrite value if k already exsists
@@ -22,9 +39,11 @@ HashTable.prototype.insert = function(k, v) {
     });
      
     if(foundKey===false){
+      this._tupCount++;
       this._storage.get(index).push([k,v]);
     }
   }
+  this.resize();
 };
 
 HashTable.prototype.retrieve = function(k) {
@@ -53,9 +72,32 @@ HashTable.prototype.remove = function(k) {
       bucket[index] = null;
     }
   });
+  this._tupCount--;
   this._storage.set(index,bucket);
-  
+  this.resize();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
