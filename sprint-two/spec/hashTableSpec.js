@@ -20,7 +20,9 @@ describe('hashTable', function() {
 
   it('should not contain values that were not inserted', function() {
     hashTable.insert('Steven', 'Spielberg');
+    debugger;
     expect(hashTable.retrieve('Steven')).not.to.equal('Seagal');
+
   });
 
   it('should overwrite values that have the same key', function() {

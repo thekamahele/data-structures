@@ -13,10 +13,15 @@
 
 
 var LimitedArray = function(limit) {
+  
   var storage = [];
-
   var limitedArray = {};
 
+  limitedArray.bigBucket = storage;
+
+  limitedArray.see = function() {
+    console.log('storage is ', storage);
+  }
   limitedArray.get = function(index) {
     checkLimit(index);
     return storage[index];
