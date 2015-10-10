@@ -7,52 +7,30 @@ var HashTable = function() {
   this._temp = false;
 };
 
-// HashTable.prototype.resize = function(){
 
-//  var thiz = this;
-//   console.log('before rehash (this):', this)
-//   console.log('before rehash (thiz):', thiz);
-  
-  HashTable.prototype.reHash = function(storage){
-    //var thiz = this;
-    var tempHash = new HashTable();
-    tempHash._limit = this._limit;
-    tempHash._storage = LimitedArray(this._limit);
-    tempHash._temp = true;
-    //iterate and call insert with new instance
-    //console.log('tempHash', tempHash);
-    //var newStorage = LimitedArray(this._limit); 
-    //this._storage.see();
-    //console.log('this is ',thiz);
+HashTable.prototype.reHash = function(storage){
+  var tempHash = new HashTable();
+  tempHash._limit = this._limit;
+  tempHash._storage = LimitedArray(this._limit);
+  //tempHash._temp = true;
 
-    //debugger;
-    //console.log('thiz storage - outside loop', thiz._storage);
-    storage.each(function(bucket){
-      
-      if(bucket !== null && bucket !== undefined){
-        //console.log('thiz storage - inside', thiz._storage);
-        _.each(bucket, function(tup){
-          //tempHash.insert(tup[0], tup[1]);
-          if(tup !== null && tup !== undefined){
-            tempHash.insert(tup[0], tup[1]);
-          }
-        });
-      } 
-    });
-    console.log('after rehash: ', tempHash);
-    this._storage = tempHash._storage;
-    //thiz._storage = tempHash._storage;
-  };
+  storage.each(function(bucket){
+    
+    if(bucket !== null && bucket !== undefined){
+      //console.log('thiz storage - inside', thiz._storage);
+      _.each(bucket, function(tup){
+        //tempHash.insert(tup[0], tup[1]);
+        if(tup !== null && tup !== undefined){
+          tempHash.insert(tup[0], tup[1]);
+        }
+      });
+    } 
+  });
 
-//   if((this._limit * .75) < this._tupCount){
-//     this._limit *= 2;
-//     this._storage = reHash();
-//   } else if ((this._limit * .25) > this._tupCount){
-//     this._limit /= 2;
-//     this._storage = reHash();
-//   }
-  
-// };
+  this._storage = tempHash._storage;
+
+};
+
 
 HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
@@ -76,27 +54,19 @@ HashTable.prototype.insert = function(k, v) {
       this._storage.get(index).push([k,v]);
     }
   }
-  console.log("this after insert call:", this);
-  var storageCopy = this._storage;
 
-  if(this._temp === false){
-    if((this._limit * .75) < this._tupCount){
-      this._limit *= 2;
-      HashTable.prototype.reHash.call(this, storageCopy);
-    } else if ((this._limit * .25) > this._tupCount){
-      this._limit /= 2;
-      HashTable.prototype.reHash.call(this, storageCopy);
-    }    
+  if((this._limit * .75) < this._tupCount){
+    this._limit *= 2;
+    HashTable.prototype.reHash.call(this, this._storage);
   }
-  //HashTable.prototype.resize.call(this);
-  // var that = this;
-  // this.resize.bind(that);
-};
+};   
+  
 
 HashTable.prototype.retrieve = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   var bucket = this._storage.get(index);
-  var result;
+  var result = null;
+
   _.each(bucket, function(tup){
     if(tup===null){
       result = null;
@@ -114,27 +84,20 @@ HashTable.prototype.remove = function(k) {
   var bucket = this._storage.get(index);
 
   _.each(bucket, function(tup, index){
-    console.log(tup);
     if(tup[0]===k){
       bucket[index] = null;
     }
   });
+
   this._tupCount--;
   this._storage.set(index,bucket);
-  if(this._temp === false){
-    if((this._limit * .75) < this._tupCount){
-      this._limit *= 2;
-      HashTable.prototype.reHash.call(this, this._storage);
-    } else if ((this._limit * .25) > this._tupCount){
-      this._limit /= 2;
-      HashTable.prototype.reHash.call(this, this._storage);
-    }    
-  }
-  //HashTable.prototype.resize.call(this);
-  // var that = this;
-  // this.resize.bind(that);
+  
+  if ((this._limit * .25) > this._tupCount){
+    this._limit /= 2;
+    HashTable.prototype.reHash.call(this, this._storage);
+  }    
+  
 };
-
 
 /*
  * Complexity: What is the time complexity of the above functions?
